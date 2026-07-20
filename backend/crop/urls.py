@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import CropUploadView
+from .views import *
 
 urlpatterns = [
-    path("upload/",CropUploadView.as_view(), name="crop_upload")
+    path("detect/",CropDetectionView.as_view(), name="detect"),
+    path("history/", DetectionHistoryView.as_view(), name="history"),
 
 ]

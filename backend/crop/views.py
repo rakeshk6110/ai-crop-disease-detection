@@ -1,41 +1,74 @@
+import os
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.generics import ListAPIView
 
-from .serializer import CropDetectionSerializer
+from .serializers import CropDetectionSerializer
+from .models import CropDetection
+
 from ai_model.predictor import predict
-class CropUploadView(APIView):
+
+
+class CropDetectionView(APIView):
+
     permission_classes = [IsAuthenticated]
 
-    def post(self,request):
-        data = request.data.copy()
-        data["user"] = request.user.id
+    def post(self, request):
 
-        serializer = CropDetectionSerializer(data=data)
+        serializer = CropDetectionSerializer(data=request.data)
 
         if serializer.is_valid():
-            
-            #save uploaded image
-            crop = serializer.save()
 
-            #AI prediction
-            prediction = predict(crop.image.path)
+            # Save image temporarily
+            detection = serializer.save(user=request.user)
 
-            #save prediction in db
-            crop.disease_name = prediction["disease"]
-            crop.confidence = prediction["confidence"]
-            crop.severity = prediction["severity"]
-            crop.save()
+            image_path = detection.image.path
+
+            # AI Prediction
+            result = predict(image_path)
+
+            disease = result["disease"]
+            confidence = result["confidence"]
+
+            # Severity Logic
+            if confidence >= 85:
+                severity = "Low"
+            elif confidence >= 70:
+                severity = "Medium"
+            else:
+                severity = "High"
+
+            # Update database
+            detection.crop_name = disease.split("_")[0]
+            detection.disease_name = disease
+            detection.confidence = confidence
+            detection.severity = severity
+            detection.save()
 
             return Response({
-                "message": "Prediction successfully",
-                "prediction":{
-                    "crop":crop.crop_name,
-                    "disease":crop.disease_name,
-                    "confidence":crop.confidence,
-                    "severity":crop.severity,
-                    "image":crop.image.url
+                "message": "Disease detected successfully",
+                "data": {
+                    "id": detection.id,
+                    "crop_name": disease.split("_")[0],
+                    "disease_name": disease,
+                    "confidence": confidence,
+                    "severity": severity,
+                    "image": request.build_absolute_uri(detection.image.url),
+                    "uploaded_at": detection.uploaded_at
                 }
-            },status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DetectionHistoryView(ListAPIView):
+
+    serializer_class = CropDetectionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return CropDetection.objects.filter(
+            user=self.request.user
+        ).order_by("uploaded_at")

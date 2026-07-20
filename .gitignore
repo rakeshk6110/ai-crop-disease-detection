@@ -27,3 +27,5 @@ build/
 
 # Environment variables
 .env
+
+ai_training_model

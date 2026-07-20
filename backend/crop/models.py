@@ -1,17 +1,19 @@
 from django.db import models
-from django.conf import settings
+from accounts.models import User
 
 class CropDetection(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
-    crop_name = models.CharField(max_length=100)
+    SEVERITY_CHOICE = [
+        ("Low","low"),
+        ("Medium","medium"),
+        ("High","high")    
+    ]
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    crop_name = models.CharField(max_length=100,blank=True)
     image = models.ImageField(upload_to="crop_images/")
     disease_name = models.CharField(max_length=200,blank=True)
     confidence = models.FloatField(default=0)
-    severity = models.CharField(max_length=50,blank=True)
+    severity = models.CharField(max_length=50, choices=SEVERITY_CHOICE,blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.crop_name
+        return self.disease_name
