@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.generics import ListAPIView
+from django.db.models import Count
 
 from .serializers import CropDetectionSerializer
 from .models import CropDetection
@@ -72,3 +73,33 @@ class DetectionHistoryView(ListAPIView):
         return CropDetection.objects.filter(
             user=self.request.user
         ).order_by("uploaded_at")
+
+class CropAnalyticsView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request):
+        total = CropDetection.objects.count()
+
+        top_diseases = (
+            CropDetection.objects
+            .values("disease_name")
+            .annotate(count=Count("id"))
+            .order_by("count")[:5]
+        )
+        severity_stats = (
+            CropDetection.objects
+            .values("severity")
+            .annotate(count=Count("id"))
+        )
+        crop_stats = (
+            CropDetection.objects
+            .values("crop_name")
+            .annotate(count=Count("id"))
+            .order_by("count")
+        )
+        return Response({
+            "total_detections":total,
+            "top_disease": list(top_diseases),
+            "severity":list(severity_stats),
+            "crop_stats":list(crop_stats)
+        })

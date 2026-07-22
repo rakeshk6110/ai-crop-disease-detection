@@ -25,26 +25,49 @@ function Login(){
         }
     }
     return(
-        <div style={{padding:"50px",maxWidth:"500px",backgroundColor:"green"}} >
-            <h1>Farmer Login</h1>
+    <div className="auth-wrapper">
+        <div className="auth-card">
+
+            <h1 className="auth-title">🌿 Farmer Login</h1>
+            <p className="auth-subtitle">
+                AI-Based Crop Disease Detection System
+            </p>
+
             <form onSubmit={handlelogin}>
-                <input type="text"
-                       placeholder="Username"
-                       value={username}
-                       onChange={(e)=>setUsername(e.target.value)}
-                       required />
-                <br />
-                <input type="password"
-                       placeholder="Password"
-                       value={password}
-                       onChange={(e)=>setPassword(e.target.value)}
-                       required />
-                <br />
-                <button type="submit">Login</button>
+
+                <div className="form-group">
+                    <label className="form-label">Username</label>
+
+                    <input
+                        type="text"
+                        className="form-input"
+                        placeholder="Enter username"
+                        value={username}
+                        onChange={(e)=>setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label className="form-label">Password</label>
+
+                    <input
+                        type="password"
+                        className="form-input"
+                        placeholder="Enter password"
+                        value={password}
+                        onChange={(e)=>setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                    Login
+                </button>
 
             </form>
         </div>
-    )
+    </div>
+)
 }
-
 export default Login

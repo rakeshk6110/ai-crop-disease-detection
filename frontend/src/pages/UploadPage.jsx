@@ -32,49 +32,97 @@ function UploadPage() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-        <div style={{ marginBottom: "20px" }}>
-  <Link to="/history">View History</Link>
+<div className="page">
+  <div className="container">
 
-  <button
-    style={{ marginLeft: "20px" }}
-    onClick={() => {
-      localStorage.clear();
-      window.location.href = "/";
-    }}
-  >
-    Logout
-  </button>
-</div>
-      <h2>Crop Disease Detection</h2>
+    <div className="navbar">
+      <div className="logo">🌿 CropAI</div>
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setImage(e.target.files[0])}
-      />
+      <div className="nav-links">
+        <Link to="/history" className="nav-link">History</Link>
+        <Link to="/dashboard" className="nav-link">Dashboard</Link>
 
-      <br /><br />
+        <button
+          className="logout-btn"
+          onClick={()=>{
+            localStorage.clear()
+            window.location.href="/"
+          }}
+        >
+          Logout
+        </button>
+      </div>
+    </div>
 
-      <button onClick={handleUpload}>
+    <div className="hero">
+      <h1>AI Crop Disease Detection</h1>
+      <p>Upload a crop leaf image and get instant disease prediction</p>
+    </div>
+
+    <div className="upload-card">
+
+      <div className="file-upload">
+        <h3>📸 Upload Leaf Image</h3>
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e)=>setImage(e.target.files[0])}
+        />
+      </div>
+
+      <button
+        className="btn btn-primary"
+        onClick={handleUpload}
+      >
         {loading ? "Analyzing..." : "Upload & Predict"}
       </button>
 
       {result && (
-        <div style={{ marginTop: "20px" }}>
+        <>
           <img
             src={result.image}
             alt="leaf"
-            width="250"
+            className="preview-image"
           />
 
-          <h3>Crop: {result.crop_name}</h3>
-          <h3>Disease: {result.disease_name}</h3>
-          <h3>Confidence: {result.confidence}%</h3>
-          <h3>Severity: {result.severity}</h3>
-        </div>
+          <div className="result-grid">
+
+            <div className="result-card">
+              <div className="result-label">Crop</div>
+              <div className="result-value">{result.crop_name}</div>
+            </div>
+
+            <div className="result-card">
+              <div className="result-label">Disease</div>
+              <div className="result-value">{result.disease_name}</div>
+            </div>
+
+            <div className="result-card">
+              <div className="result-label">Confidence</div>
+              <div className="result-value">{result.confidence}%</div>
+            </div>
+
+            <div className="result-card">
+              <div className="result-label">Severity</div>
+
+              <div className={`result-value ${
+                result.severity === "Low"
+                  ? "severity-low"
+                  : result.severity === "Medium"
+                  ? "severity-medium"
+                  : "severity-high"
+              }`}>
+                {result.severity}
+              </div>
+            </div>
+
+          </div>
+        </>
       )}
     </div>
+  </div>
+</div>
   );
 }
 
