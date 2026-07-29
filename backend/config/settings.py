@@ -13,7 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5gc3w%$9v!zyt0(a*3se#m5hqvn34l^9#@jf_pj6%w6r^)0nn@'
+# SECRET_KEY = 'django-insecure-5gc3w%$9v!zyt0(a*3se#m5hqvn34l^9#@jf_pj6%w6r^)0nn@'
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
@@ -74,7 +75,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default':  dj_database_url.config(
-        default=config("DATABASE_URL")
+        default=config("postgresql://crop_database_x348_user:imGfWErFZrLwO4EgXpmpkYVL7WNkXtij@dpg-d9kq88r7uimc73fvnje0-a.oregon-postgres.render.com/crop_database_x348")
     )
 }
 
