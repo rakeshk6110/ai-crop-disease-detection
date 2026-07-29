@@ -1,6 +1,9 @@
 
 from pathlib import Path
 from datetime import timedelta  # for change jwt token time
+from decouple import config
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5gc3w%$9v!zyt0(a*3se#m5hqvn34l^9#@jf_pj6%w6r^)0nn@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -70,15 +73,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'crop_disease_db',
-        'USER':'root',
-        'PASSWORD':'Rakesh3067#',
-        'HOST':'localhost',
-        'PORT':'3306'
-
-    }
+    'default':  dj_database_url.config(
+        default=config("DATABASE_URL")
+    )
 }
 
 
@@ -125,6 +122,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+     "https://your-frontend.vercel.app",
 ]
 
 REST_FRAMEWORK = {
@@ -150,3 +148,6 @@ AUTH_USER_MODEL = 'accounts.User'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
