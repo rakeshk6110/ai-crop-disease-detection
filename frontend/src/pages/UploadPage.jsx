@@ -6,6 +6,7 @@ function UploadPage() {
   const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [diseaseInfo, setDiseaseInfo] = useState(null);
 
   const handleUpload = async () => {
     if (!image) return;
@@ -20,13 +21,17 @@ function UploadPage() {
         "/crop/detect/",
         formData
       );
+      const result = response.data.data
+      setResult(result);
 
-      setResult(response.data.data);
+       const diseaseResponse = await API.get(`/disease/${result.disease_name}/`);
+       setDiseaseInfo(diseaseResponse.data);
 
     } catch (error) {
       console.log(error);
       alert("Upload failed");
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };
@@ -120,6 +125,40 @@ function UploadPage() {
           </div>
         </>
       )}
+      {diseaseInfo && (
+
+<div className="info-card">
+
+    <h2>Disease Details</h2>
+
+    <br/>
+
+    <h3>Description</h3>
+    <p>{diseaseInfo.description}</p>
+
+    <br/>
+
+    <h3>Symptoms</h3>
+    <p>{diseaseInfo.symptoms}</p>
+
+    <br/>
+
+    <h3>Causes</h3>
+    <p>{diseaseInfo.causes}</p>
+
+    <br/>
+
+    <h3>Solution</h3>
+    <p>{diseaseInfo.solution}</p>
+
+    <br/>
+
+    <h3>Prevention</h3>
+    <p>{diseaseInfo.prevention}</p>
+
+</div>
+
+)}
     </div>
   </div>
 </div>

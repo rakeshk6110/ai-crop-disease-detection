@@ -4,6 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis,
   PieChart, Pie, Tooltip
 } from "recharts";
+import { ClipLoader } from "react-spinners";
 
 function Dashboard() {
 
@@ -19,7 +20,13 @@ function Dashboard() {
     setData(response.data);
   };
 
-  if (!data) return <h2>Loading...</h2>;
+  if (!data) {
+    return (
+        <div className="loader" style={{"textAlign":"center"}}>
+            <ClipLoader  size={100} color="#16a34a" />
+        </div>
+    );
+}
 
   return (
 <div className="page">

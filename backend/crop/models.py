@@ -17,3 +17,33 @@ class CropDetection(models.Model):
 
     def __str__(self):
         return self.disease_name
+
+
+class CropAdvisory(models.Model):
+    crop_name  = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class FarmerQuery(models.Model):
+    user = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="queries"
+    )
+
+    subject = models.CharField(max_length=200)
+    question = models.TextField()
+    reply = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        default="Pending"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subject

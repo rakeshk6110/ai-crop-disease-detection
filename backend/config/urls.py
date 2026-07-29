@@ -1,19 +1,17 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import(
-    TokenObtainPairView,
-    TokenRefreshView
-)
+from accounts.views import CustomTokenObtainPairView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/accounts/',include("accounts.urls")),
-    path('api/token/',TokenObtainPairView.as_view(), name="token_obtain_pair"), #access token
-    path('api/token/refresh/',TokenRefreshView.as_view(), name="token_refresh"), #new access token
+    path('api/token/',CustomTokenObtainPairView.as_view(), name="token_obtain_pair"), #access token
+    path('api/token/refresh/',CustomTokenObtainPairView.as_view(), name="token_refresh"), #new access token
     path('api/crop/',include('crop.urls')),
+    path('api/disease/',include('disease.urls')),
 ]
 
 if settings.DEBUG:

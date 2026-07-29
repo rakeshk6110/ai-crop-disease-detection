@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-
 function HistoryPage() {
 
   const [history, setHistory] = useState([]);
+  
 
   useEffect(() => {
     fetchHistory();
@@ -18,9 +18,11 @@ function HistoryPage() {
     } catch (error) {
       console.log(error);
     }
+    
   };
 
   return (
+    
     <div className="page">
   <div className="container">
 
