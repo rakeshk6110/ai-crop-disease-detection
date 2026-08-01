@@ -1,4 +1,4 @@
-import FarmerSidebar from "./FarmerSidebar";
+import FarmerSidebar from "./FarmerSideBar";
 import Navbar from "./Navbar";
 
 function FarmerLayout({ children }) {
