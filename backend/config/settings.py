@@ -25,6 +25,7 @@ ALLOWED_HOSTS = [
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://ai-crop-disease-detection-and-famer.onrender.com",
+    "https://ai-crop-disease-detection-beta.vercel.app/"
 ]
 
 
