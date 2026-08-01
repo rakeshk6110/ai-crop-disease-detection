@@ -129,8 +129,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173/",
-    "https://YOUR-FRONTEND.onrender.com",
+    "https://ai-crop-disease-detection-beta.vercel.app/",
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
