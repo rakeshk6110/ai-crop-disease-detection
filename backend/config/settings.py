@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default':  dj_database_url.config(
-        default=config("postgresql://crop_database_x348_user:imGfWErFZrLwO4EgXpmpkYVL7WNkXtij@dpg-d9kq88r7uimc73fvnje0-a.oregon-postgres.render.com/crop_database_x348")
+        default=config("DATABASE_URL")
     )
 }
 
