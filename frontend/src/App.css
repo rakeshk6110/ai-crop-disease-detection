@@ -216,6 +216,7 @@ a{
     font-size: 20px;
     font-weight: 700;
     color: #111827;
+    overflow: auto;
 }
 
 .severity-low{
